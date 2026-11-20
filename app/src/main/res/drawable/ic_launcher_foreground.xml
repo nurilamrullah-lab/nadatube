@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- flowing tone wave behind the bars -->
+    <path android:pathData="M26,56 C33,40 40,40 47,54 S61,70 68,56 S78,42 83,48"
+        android:strokeColor="#FFA5B4FC" android:strokeWidth="2.5" android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <!-- equalizer / waveform bars -->
+    <group android:name="bars">
+        <path android:pathData="M33,49 L33,61" android:strokeColor="#FFFFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round" />
+        <path android:pathData="M40.5,44 L40.5,66" android:strokeColor="#FFFFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round" />
+        <path android:pathData="M48,38 L48,72" android:strokeColor="#FFFFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round" />
+        <path android:pathData="M55.5,33 L55.5,77" android:strokeColor="#FFFFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round" />
+        <path android:pathData="M63,40 L63,70" android:strokeColor="#FFFFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round" />
+        <path android:pathData="M70.5,46 L70.5,64" android:strokeColor="#FFFFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round" />
+    </group>
+    <!-- eighth note accent -->
+    <path android:pathData="M77,30 L77,47" android:strokeColor="#FFFDE68A" android:strokeWidth="2.2" android:strokeLineCap="round" />
+    <path android:pathData="M77,30 C80,31 83,33 82,37" android:strokeColor="#FFFDE68A" android:strokeWidth="2.2" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <path android:pathData="M74.5,47m-3,0a3,2.4 0,1 1,6 0a3,2.4 0,1 1,-6 0" android:fillColor="#FFFDE68A" />
+</vector>
