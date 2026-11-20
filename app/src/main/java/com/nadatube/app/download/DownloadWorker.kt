@@ -16,6 +16,7 @@ import com.nadatube.app.data.db.DownloadStatus
 import com.nadatube.app.extractor.AudioStreamSelector
 import com.nadatube.app.extractor.InnerTubeClient
 import com.nadatube.app.extractor.InnerTubeParser
+import com.nadatube.app.extractor.StreamRejectedException
 import com.nadatube.app.model.Track
 import okhttp3.Request
 import java.io.File
@@ -39,7 +40,7 @@ class DownloadWorker(context: Context, params: WorkerParameters) : CoroutineWork
             val dir = downloadDir(applicationContext)
             val target = File(dir, OfflineFiles.fileName(stored, stream.extension))
             val part = File(dir, target.name + ".part")
-            downloadChunked(stream.url, stream.contentLength, part) { p ->
+            downloadChunked(stream.url, stream.contentLength, part, resolved.userAgent ?: InnerTubeClient.STREAM_USER_AGENT, resolved.clientName) { p ->
                 dao.updateProgress(videoId, DownloadStatus.DOWNLOADING.name, p * 0.95f)
             }
 
@@ -66,13 +67,22 @@ class DownloadWorker(context: Context, params: WorkerParameters) : CoroutineWork
             )
             Result.success()
         } catch (e: Exception) {
+            // Steer WorkManager's retry away from the client whose URL was refused.
+            if (e is StreamRejectedException) container.innerTube.reportRejected(videoId, e.clientName)
             dao.upsert(existing.copy(status = DownloadStatus.FAILED.name, error = e.message))
             if (runAttemptCount < 2) Result.retry() else Result.failure()
         }
     }
 
     /** googlevideo throttles un-ranged requests, so fetch in fixed-size Range chunks. */
-    private suspend fun downloadChunked(url: String, knownLength: Long?, out: File, onProgress: suspend (Float) -> Unit) {
+    private suspend fun downloadChunked(
+        url: String,
+        knownLength: Long?,
+        out: File,
+        userAgent: String,
+        clientName: String,
+        onProgress: suspend (Float) -> Unit,
+    ) {
         val http = (applicationContext as NadaTubeApp).container.httpClient
         var offset = 0L
         var total = knownLength ?: -1L
@@ -82,10 +92,11 @@ class DownloadWorker(context: Context, params: WorkerParameters) : CoroutineWork
                 val end = offset + CHUNK - 1
                 val request = Request.Builder().url(url)
                     .header("Range", "bytes=$offset-$end")
-                    .header("User-Agent", InnerTubeClient.STREAM_USER_AGENT)
+                    .header("User-Agent", userAgent)
                     .build()
                 http.newCall(request).execute().use { r ->
                     if (r.code == 416) return
+                    if (r.code == 403 || r.code == 410) throw StreamRejectedException(clientName, r.code)
                     if (!r.isSuccessful) throw IOException("Unduhan HTTP ${r.code}")
                     if (total < 0) {
                         total = r.header("Content-Range")?.substringAfter('/')?.toLongOrNull() ?: r.body!!.contentLength()
