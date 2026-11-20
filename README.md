@@ -35,3 +35,11 @@ NADATUBE_LIVE=1 ./gradlew testDebugUnitTest --tests '*LiveSmokeTest*'   # uji ke
 ```
 
 Catatan: YouTube kadang meminta verifikasi "bukan bot" untuk sebagian lagu bila diakses dari IP datacenter (CI/server). Di jaringan seluler/rumah hal ini jarang terjadi.
+
+## Tampilan
+
+| Beranda | Cari | Pemutar | Equalizer | Pustaka |
+|---|---|---|---|---|
+| ![](docs/screenshots/1_home.png) | ![](docs/screenshots/2_search.png) | ![](docs/screenshots/3_player.png) | ![](docs/screenshots/4_equalizer.png) | ![](docs/screenshots/5_library.png) |
+
+Dirender dari layar asli dengan data YouTube live via Robolectric: `NADATUBE_SCREENSHOTS=1 ./gradlew testDebugUnitTest --tests '*ScreenRenderTest*'`

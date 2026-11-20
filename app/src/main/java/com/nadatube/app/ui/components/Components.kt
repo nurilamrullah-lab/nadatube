@@ -163,6 +163,7 @@ data class TrackRowState(
     val isFavorite: Boolean = false,
     val isDownloaded: Boolean = false,
     val badge: String? = null,
+    val badgeHq: Boolean = true,
 )
 
 @Composable
@@ -204,8 +205,8 @@ fun TrackRow(
             )
             Spacer(Modifier.size(3.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                if (state.isDownloaded) Icon(Icons.Rounded.CheckCircle, "Tersedia offline", tint = Nada.Green, modifier = Modifier.size(14.dp))
-                if (state.badge != null) QualityBadge(state.badge)
+                if (state.isDownloaded && !showQuickActions) Icon(Icons.Rounded.CheckCircle, "Tersedia offline", tint = Nada.Green, modifier = Modifier.size(14.dp))
+                if (state.badge != null) QualityBadge(state.badge, hq = state.badgeHq)
                 Text(
                     listOfNotNull(track.artist.ifEmpty { null }, formatDuration(track.durationMs).takeIf { track.durationMs > 0 }).joinToString(" • "),
                     style = MaterialTheme.typography.bodySmall, color = Nada.Muted, maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -213,10 +214,10 @@ fun TrackRow(
             }
         }
         if (showQuickActions) {
-            IconButton(onClick = { container.player.addToQueue(track) }) {
+            IconButton(onClick = { container.player.addToQueue(track) }, modifier = Modifier.size(38.dp)) {
                 Icon(Icons.AutoMirrored.Rounded.QueueMusic, "Tambah ke antrean", tint = Nada.Muted)
             }
-            IconButton(onClick = { scope.launch { container.library.download(track) } }) {
+            IconButton(onClick = { scope.launch { container.library.download(track) } }, modifier = Modifier.size(38.dp)) {
                 Icon(
                     if (state.isDownloaded) Icons.Rounded.CheckCircle else Icons.Rounded.DownloadForOffline,
                     "Unduh offline", tint = if (state.isDownloaded) Nada.Green else Nada.Muted,
@@ -224,7 +225,7 @@ fun TrackRow(
             }
         }
         Box {
-            IconButton(onClick = { menu = true }) { Icon(Icons.Rounded.MoreVert, "Opsi", tint = Nada.Faint) }
+            IconButton(onClick = { menu = true }, modifier = Modifier.size(if (showQuickActions) 34.dp else 48.dp)) { Icon(Icons.Rounded.MoreVert, "Opsi", tint = Nada.Faint) }
             DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                 DropdownMenuItem(text = { Text("Putar") }, leadingIcon = { Icon(Icons.Rounded.PlayArrow, null) }, onClick = { menu = false; onClick() })
                 DropdownMenuItem(text = { Text("Putar berikutnya") }, leadingIcon = { Icon(Icons.Rounded.SkipNext, null) }, onClick = { menu = false; container.player.playNext(track) })
