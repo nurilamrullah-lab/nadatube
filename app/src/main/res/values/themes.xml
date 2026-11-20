@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="canvas">#F8F9FA</color>
+    <color name="indigo">#4F46E5</color>
+    <color name="indigo_light">#6366F1</color>
+    <color name="ic_launcher_background">#4F46E5</color>
+
+    <style name="Theme.NadaTube" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/canvas</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:colorAccent">@color/indigo</item>
+    </style>
+</resources>
