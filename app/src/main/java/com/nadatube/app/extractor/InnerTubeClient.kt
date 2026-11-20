@@ -20,13 +20,15 @@ import java.io.IOException
  * Minimal InnerTube client.
  *
  * - Metadata (search, albums, radio) uses the WEB_REMIX (YouTube Music web) client.
- * - Streams use the ANDROID_VR client, which currently returns direct, unciphered
- *   googlevideo URLs for audio-only adaptive formats.
+ * - Streams try [STREAM_CLIENTS] in order. A client can answer "OK" yet hand out URLs that
+ *   googlevideo rejects with 403 (IOS/ANDROID need a PO token we don't have), so every
+ *   candidate's URL is probed before it is accepted.
  */
 class InnerTubeClient(
     private val http: OkHttpClient,
     private val baseUrl: String = "https://www.youtube.com",
     private val musicBaseUrl: String = "https://music.youtube.com",
+    private val streamClients: List<Client> = STREAM_CLIENTS,
 ) {
     data class Client(val name: String, val id: Int, val version: String, val userAgent: String, val extra: Map<String, Any> = emptyMap())
 
@@ -40,6 +42,11 @@ class InnerTubeClient(
             version = "1.62.27",
             userAgent = "com.google.android.apps.youtube.vr.oculus/1.62.27 (Linux; U; Android 12L; eureka-user Build/SQ3A.220605.009.A1) gzip",
         )
+        val ANDROID = Client(
+            "ANDROID", 3, "20.10.38",
+            "com.google.android.youtube/20.10.38 (Linux; U; Android 14) gzip",
+            mapOf("androidSdkVersion" to 34, "osName" to "Android", "osVersion" to "14"),
+        )
         val IOS = Client(
             "IOS", 5, "20.10.4",
             "com.google.ios.youtube/20.10.4 (iPhone16,2; U; CPU iOS 18_3_2 like Mac OS X;)",
@@ -47,7 +54,14 @@ class InnerTubeClient(
         )
         val WEB_REMIX = Client("WEB_REMIX", 67, "1.20241127.01.00", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0")
 
-        /** googlevideo checks that the downloader's UA matches the client that requested the URL. */
+        /**
+         * Only clients observed to return direct (unciphered) audio URLs. ANDROID_MUSIC
+         * (LOGIN_REQUIRED for every video), ANDROID_TESTSUITE (UNPLAYABLE) and
+         * TVHTML5_SIMPLY_EMBEDDED_PLAYER (ERROR) were tried and never yield playable URLs.
+         */
+        val STREAM_CLIENTS = listOf(ANDROID_VR, ANDROID_VR_NEW, ANDROID, IOS)
+
+        /** Fallback UA for stream requests whose issuing client is unknown. */
         val STREAM_USER_AGENT get() = ANDROID_VR.userAgent
 
         private val JSON = "application/json".toMediaType()
@@ -56,21 +70,66 @@ class InnerTubeClient(
     var hl: String = "id"
     var gl: String = "ID"
 
+    /** Clients that issued 403 URLs recently for a video; skipped on the next resolve. */
+    private val rejected = java.util.concurrent.ConcurrentHashMap<String, MutableSet<String>>()
+
+    /** Called when a URL from [clientName] failed mid-playback, so re-resolution moves on. */
+    fun reportRejected(videoId: String, clientName: String) {
+        if (clientName.isNotEmpty()) rejected.getOrPut(videoId) { java.util.concurrent.ConcurrentHashMap.newKeySet() } += clientName
+    }
+
     suspend fun player(videoId: String): ResolvedStream = withContext(Dispatchers.IO) {
-        var last: Exception? = null
-        for (client in listOf(ANDROID_VR, ANDROID_VR_NEW, IOS)) {
+        val skip = rejected[videoId].orEmpty()
+        val candidates = streamClients.filter { "${it.name}/${it.version}" !in skip }
+            .ifEmpty { rejected.remove(videoId); streamClients }
+        val failures = mutableListOf<Exception>()
+        for (client in candidates) {
             try {
                 val body = post(baseUrl, "player", client, buildJsonObject {
                     put("videoId", videoId)
                     put("contentCheckOk", true)
                     put("racyCheckOk", true)
                 })
-                return@withContext InnerTubeParser.parsePlayer(body)
+                val resolved = InnerTubeParser.parsePlayer(body)
+                    .copy(clientName = "${client.name}/${client.version}", userAgent = client.userAgent)
+                probe(resolved)
+                return@withContext resolved
             } catch (e: Exception) {
-                last = e
+                failures += e
             }
         }
-        throw last ?: ExtractionException("Gagal mengambil stream")
+        throw playbackFailure(failures)
+    }
+
+    /**
+     * Ranged GET against the stream we would actually play. URLs issued without a PO token
+     * (IOS/ANDROID on gated videos) serve ranges inside roughly the first megabyte and 403
+     * everything past it, so probing the start proves nothing. Probe the last byte instead
+     * (or an open-ended range when the length is unknown) so only fully playable URLs pass.
+     */
+    private fun probe(resolved: ResolvedStream) {
+        val stream = AudioStreamSelector.selectForPlayback(resolved.streams) ?: return
+        val length = stream.contentLength
+        val range = if (length != null && length > 0) "bytes=${length - 1}-${length - 1}" else "bytes=0-"
+        val request = Request.Builder().url(stream.url)
+            .header("User-Agent", resolved.userAgent ?: STREAM_USER_AGENT)
+            .header("Range", range)
+            .build()
+        http.newCall(request).execute().use { r ->
+            if (!r.isSuccessful) throw StreamRejectedException(resolved.clientName, r.code)
+        }
+    }
+
+    private fun playbackFailure(failures: List<Exception>): Exception {
+        val blocked = failures.any { (it as? PlayabilityException)?.isBotCheck == true || it is StreamRejectedException }
+        return when {
+            blocked -> ExtractionException(
+                "YouTube memblokir lagu ini dari jaringan saat ini (verifikasi \"bukan bot\"). " +
+                    "Coba matikan VPN atau ganti jaringan (Wi-Fi ↔ data seluler).",
+            )
+            else -> failures.firstOrNull { it is PlayabilityException } ?: failures.lastOrNull()
+                ?: ExtractionException("Gagal mengambil stream")
+        }
     }
 
     suspend fun search(query: String, filter: SearchFilter, continuation: String? = null): SearchPage =

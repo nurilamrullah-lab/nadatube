@@ -39,6 +39,17 @@ class StreamResolver(
 
     fun loudnessDb(videoId: String): Float? = cache[videoId]?.loudnessDb
 
+    /** User-Agent of the client that issued [videoId]'s URLs; googlevideo requests must match it. */
+    fun userAgent(videoId: String): String = cache[videoId]?.userAgent ?: InnerTubeClient.STREAM_USER_AGENT
+
+    /**
+     * A stream URL failed during playback (403/410). Drop it and steer the next resolve away
+     * from the client that issued it.
+     */
+    fun reject(videoId: String) {
+        cache.remove(videoId)?.let { client.reportRejected(videoId, it.clientName) }
+    }
+
     fun invalidate(videoId: String) {
         cache.remove(videoId)
     }

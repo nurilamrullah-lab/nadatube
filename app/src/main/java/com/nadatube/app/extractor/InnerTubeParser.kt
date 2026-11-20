@@ -12,6 +12,11 @@ import kotlinx.serialization.json.JsonElement
 
 class ExtractionException(message: String) : Exception(message)
 
+/** InnerTube refused playback (e.g. LOGIN_REQUIRED "confirm you're not a bot"). */
+class PlayabilityException(val status: String, val reason: String) : Exception("Video tidak dapat diputar: $reason") {
+    val isBotCheck: Boolean get() = status == "LOGIN_REQUIRED" && ("bot" in reason.lowercase())
+}
+
 /**
  * Pure parsers for InnerTube responses. No networking here so everything is unit-testable
  * against recorded fixtures.
@@ -33,7 +38,7 @@ object InnerTubeParser {
         val status = root.path("playabilityStatus", "status").str
         if (status != "OK") {
             val reason = root.path("playabilityStatus", "reason").str ?: status ?: "unknown"
-            throw ExtractionException("Video tidak dapat diputar: $reason")
+            throw PlayabilityException(status ?: "UNKNOWN", reason)
         }
         val details = root["videoDetails"]
         val videoId = details["videoId"].str ?: throw ExtractionException("videoId hilang")
@@ -48,9 +53,16 @@ object InnerTubeParser {
         val streams = streaming["adaptiveFormats"].arr.mapNotNull(::parseAudioFormat)
         if (streams.isEmpty()) throw ExtractionException("Tidak ada stream audio langsung untuk $videoId")
         val expiresIn = streaming["expiresInSeconds"].long ?: 6 * 3600L
+        // The URL's own `expire` is what googlevideo enforces; trust it over expiresInSeconds.
+        val urlExpiry = streams.mapNotNull { urlExpiryMs(it.url) }.minOrNull()
+        val expiresAt = listOfNotNull(nowMs + expiresIn * 1000L, urlExpiry).min()
         val loudness = root.path("playerConfig", "audioConfig", "loudnessDb").str?.toFloatOrNull()
-        return ResolvedStream(track, streams, loudness, nowMs + expiresIn * 1000L)
+        return ResolvedStream(track, streams, loudness, expiresAt)
     }
+
+    /** `expire` query parameter (unix seconds) of a googlevideo URL, in ms. */
+    fun urlExpiryMs(url: String): Long? =
+        Regex("""[?&]expire=(\d+)""").find(url)?.groupValues?.get(1)?.toLongOrNull()?.times(1000L)
 
     /** Returns null for video formats and for ciphered formats (we never decipher signatures). */
     internal fun parseAudioFormat(f: JsonElement): AudioStream? {

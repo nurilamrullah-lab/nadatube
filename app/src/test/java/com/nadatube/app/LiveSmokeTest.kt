@@ -38,6 +38,22 @@ class LiveSmokeTest {
             .header("User-Agent", InnerTubeClient.STREAM_USER_AGENT).build()
         http.newCall(range).execute().use { assertEquals(206, it.code); assertEquals(65536, it.body!!.bytes().size) }
 
+        // Regression for "Gagal memutar: Response code: 403": a music track may be bot-gated
+        // for ANDROID_VR on this network, and IOS/ANDROID then answer OK with URLs that 403.
+        // The extractor must either return a URL that really downloads or fail with a clear message.
+        try {
+            val gated = yt.player(song.videoId)
+            val s = AudioStreamSelector.selectForPlayback(gated.streams)!!
+            val len = s.contentLength!!
+            // The tail, not the head: PO-token-less URLs serve the first MB and 403 the rest.
+            val req = Request.Builder().url(s.url).header("Range", "bytes=${len - 65536}-${len - 1}").header("User-Agent", gated.userAgent!!).build()
+            http.newCall(req).execute().use { assertEquals("client ${gated.clientName}", 206, it.code) }
+            println("gated song → playable via ${gated.clientName}")
+        } catch (e: com.nadatube.app.extractor.ExtractionException) {
+            println("gated song → ${e.message}")
+            assertTrue(e.message!!.contains("memblokir"))
+        }
+
         val radio = yt.radio(song.videoId)
         println("radio → ${radio.size} tracks")
         assertTrue(radio.size > 5)
