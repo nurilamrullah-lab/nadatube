@@ -47,7 +47,7 @@ class AppContainer(private val app: Application) {
         .build()
 
     val settings = SettingsStore(app)
-    val innerTube = InnerTubeClient(httpClient)
+    val innerTube = InnerTubeClient(httpClient, initialVisitorData = settings.visitorData, onVisitorData = { settings.visitorData = it })
     val streamResolver = StreamResolver(innerTube, { settings.quality.value })
     val sponsorBlock = SponsorBlockClient(httpClient)
     val lyrics = LyricsClient(httpClient)

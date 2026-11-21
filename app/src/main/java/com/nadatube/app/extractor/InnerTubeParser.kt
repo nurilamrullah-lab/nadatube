@@ -60,6 +60,10 @@ object InnerTubeParser {
         return ResolvedStream(track, streams, loudness, expiresAt)
     }
 
+    /** `responseContext.visitorData` from a `visitor_id` (or any InnerTube) response. */
+    fun parseVisitorData(body: String): String? =
+        parseRoot(body).path("responseContext", "visitorData").str?.takeIf { it.isNotBlank() }
+
     /** `expire` query parameter (unix seconds) of a googlevideo URL, in ms. */
     fun urlExpiryMs(url: String): Long? =
         Regex("""[?&]expire=(\d+)""").find(url)?.groupValues?.get(1)?.toLongOrNull()?.times(1000L)

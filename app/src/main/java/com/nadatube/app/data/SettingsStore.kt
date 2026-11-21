@@ -62,6 +62,11 @@ class SettingsStore(context: Context) {
         prefs.edit().putStringSet("sb_categories", next).apply()
     }
 
+    /** YouTube session visitor id, minted once and reused so requests look like one session. */
+    var visitorData: String?
+        get() = prefs.getString("visitor_data", null)
+        set(value) { prefs.edit().putString("visitor_data", value).apply() }
+
     /** Per-install AES key for the encrypted audio cache. */
     fun cacheKey(): ByteArray {
         prefs.getString("cache_key", null)?.let { return android.util.Base64.decode(it, android.util.Base64.NO_WRAP) }
