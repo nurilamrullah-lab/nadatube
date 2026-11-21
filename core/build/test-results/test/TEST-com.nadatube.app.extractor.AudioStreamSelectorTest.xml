@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nadatube.app.extractor.AudioStreamSelectorTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-21T00:58:49" hostname="modal" time="0.076">
+  <properties/>
+  <testcase name="downloads prefer taggable m4a" classname="com.nadatube.app.extractor.AudioStreamSelectorTest" time="0.063"/>
+  <testcase name="empty list selects nothing" classname="com.nadatube.app.extractor.AudioStreamSelectorTest" time="0.001"/>
+  <testcase name="best quality picks opus 160 over aac 128" classname="com.nadatube.app.extractor.AudioStreamSelectorTest" time="0.0"/>
+  <testcase name="download falls back to opus when no aac" classname="com.nadatube.app.extractor.AudioStreamSelectorTest" time="0.0"/>
+  <testcase name="data saver picks lowest usable bitrate" classname="com.nadatube.app.extractor.AudioStreamSelectorTest" time="0.0"/>
+  <testcase name="quality labels" classname="com.nadatube.app.extractor.AudioStreamSelectorTest" time="0.007"/>
+  <testcase name="audio-only saves most of the data of a 720p stream" classname="com.nadatube.app.extractor.AudioStreamSelectorTest" time="0.002"/>
+  <testcase name="aac 256 premium stream beats opus 160" classname="com.nadatube.app.extractor.AudioStreamSelectorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

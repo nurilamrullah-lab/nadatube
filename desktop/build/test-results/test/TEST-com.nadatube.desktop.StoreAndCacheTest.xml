@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nadatube.desktop.StoreAndCacheTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-21T01:08:33" hostname="modal" time="0.198">
+  <properties/>
+  <testcase name="favorites, history and settings persist across restarts" classname="com.nadatube.desktop.StoreAndCacheTest" time="0.005"/>
+  <testcase name="history is capped and a corrupt file is set aside instead of crashing" classname="com.nadatube.desktop.StoreAndCacheTest" time="0.173"/>
+  <testcase name="cache evicts least recently used and keeps the newest" classname="com.nadatube.desktop.StoreAndCacheTest" time="0.01"/>
+  <testcase name="incomplete download is rejected and leaves no file" classname="com.nadatube.desktop.StoreAndCacheTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

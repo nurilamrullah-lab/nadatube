@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nadatube.app.extractor.StreamClientFallbackTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-11-21T00:58:49" hostname="modal" time="0.473">
+  <properties/>
+  <testcase name="a persisted visitor id is reused without minting a new one" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.32"/>
+  <testcase name="when every client was rejected the memory resets instead of failing forever" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.013"/>
+  <testcase name="range interceptor adds an open range only to stream hosts without one" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.006"/>
+  <testcase name="failing to mint a visitor id is not fatal" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.008"/>
+  <testcase name="bot check triggers one retry with a freshly minted visitor id" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.023"/>
+  <testcase name="everything blocked gives an actionable message instead of a 403" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.023"/>
+  <testcase name="visionos is tried first with a minted visitor id and the exact request shape" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.009"/>
+  <testcase name="genuinely unavailable video surfaces YouTube's own reason" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.011"/>
+  <testcase name="a client reported as rejected mid-playback is skipped next time" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.015"/>
+  <testcase name="dns prefers ipv4 so player and stream requests share an address family" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.002"/>
+  <testcase name="stream host matcher" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.002"/>
+  <testcase name="urls that only serve the first megabyte are rejected (the 403-after-start bug)" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.029"/>
+  <testcase name="skips bot-gated and 403 clients, picks the first whose stream really downloads" classname="com.nadatube.app.extractor.StreamClientFallbackTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

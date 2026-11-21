@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nadatube.desktop.DesktopPlayerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-21T01:08:31" hostname="modal" time="1.91">
+  <properties/>
+  <testcase name="second play comes from the cache without downloading again" classname="com.nadatube.desktop.DesktopPlayerTest" time="0.37"/>
+  <testcase name="plays a track end to end, records history and caches the audio" classname="com.nadatube.desktop.DesktopPlayerTest" time="0.037"/>
+  <testcase name="bot-gated song shows a clear message and does not crash" classname="com.nadatube.desktop.DesktopPlayerTest" time="0.025"/>
+  <testcase name="repeat one replays the same track" classname="com.nadatube.desktop.DesktopPlayerTest" time="0.045"/>
+  <testcase name="plays the queue in order and stops after the last track" classname="com.nadatube.desktop.DesktopPlayerTest" time="0.044"/>
+  <testcase name="sponsorblock segment is skipped during playback" classname="com.nadatube.desktop.DesktopPlayerTest" time="1.384"/>
+  <testcase name="volume is stored and applied" classname="com.nadatube.desktop.DesktopPlayerTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

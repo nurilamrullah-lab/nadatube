@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nadatube.desktop.AudioEngineTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-11-21T01:08:31" hostname="modal" time="0.763">
+  <properties/>
+  <testcase name="truncated or non-audio files fail clearly" classname="com.nadatube.desktop.AudioEngineTest" time="0.042"/>
+  <testcase name="pause stops output and resume continues" classname="com.nadatube.desktop.AudioEngineTest" time="0.377"/>
+  <testcase name="index lookup is monotonic and clamped" classname="com.nadatube.desktop.AudioEngineTest" time="0.001"/>
+  <testcase name="volume scaling" classname="com.nadatube.desktop.AudioEngineTest" time="0.047"/>
+  <testcase name="seek restarts from the right frame and discards the old sink" classname="com.nadatube.desktop.AudioEngineTest" time="0.01"/>
+  <testcase name="plays a track to the end and reports it" classname="com.nadatube.desktop.AudioEngineTest" time="0.018"/>
+  <testcase name="volume changes apply to the frames that follow" classname="com.nadatube.desktop.AudioEngineTest" time="0.033"/>
+  <testcase name="mono 48k decodes to the 880 Hz tone" classname="com.nadatube.desktop.AudioEngineTest" time="0.012"/>
+  <testcase name="fragmented mp4 like YouTube's is demuxed" classname="com.nadatube.desktop.AudioEngineTest" time="0.01"/>
+  <testcase name="explicit no-SBR extension is trimmed, real SBR and HE-AAC are kept" classname="com.nadatube.desktop.AudioEngineTest" time="0.0"/>
+  <testcase name="decoded audio really is the 440 Hz tone, at full length" classname="com.nadatube.desktop.AudioEngineTest" time="0.02"/>
+  <testcase name="progressive mono file is demuxed" classname="com.nadatube.desktop.AudioEngineTest" time="0.001"/>
+  <testcase name="loading a new track stops the previous one without reporting an end" classname="com.nadatube.desktop.AudioEngineTest" time="0.191"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
