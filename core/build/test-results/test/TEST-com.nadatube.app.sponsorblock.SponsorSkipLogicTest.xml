@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-11-21T00:58:50" hostname="modal" time="0.018">
+  <properties/>
+  <testcase name="client parses api response, sorts and caches" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.012"/>
+  <testcase name="outro reaching the end means skip to next track" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.0"/>
+  <testcase name="client treats 404 as no segments" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.004"/>
+  <testcase name="skips when inside a segment" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.0"/>
+  <testcase name="overlapping segments merge into one jump" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.001"/>
+  <testcase name="respects manual seek back into an already skipped segment" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.0"/>
+  <testcase name="total skippable time" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.0"/>
+  <testcase name="ignores disabled categories, non-skip actions and tiny segments" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.0"/>
+  <testcase name="does not skip outside or right at the end of a segment" classname="com.nadatube.app.sponsorblock.SponsorSkipLogicTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

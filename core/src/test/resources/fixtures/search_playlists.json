@@ -1,0 +1,513 @@
+{
+ "contents": {
+  "tabbedSearchResultsRenderer": {
+   "tabs": [
+    {
+     "tabRenderer": {
+      "title": "YT Music",
+      "selected": true,
+      "content": {
+       "sectionListRenderer": {
+        "contents": [
+         {
+          "musicShelfRenderer": {
+           "title": {
+            "runs": [
+             {
+              "text": "Community playlists"
+             }
+            ]
+           },
+           "contents": [
+            {
+             "musicResponsiveListItemRenderer": {
+              "thumbnail": {
+               "musicThumbnailRenderer": {
+                "thumbnail": {
+                 "thumbnails": [
+                  {
+                   "url": "https://yt3.googleusercontent.com/JyCFwLjPpOWAyhx9mtPaD92Phz-MyWLGT9O1wegAuhyQr00XDqgGotLx9xzAVBtEGAq7AMmx9vOt=s192",
+                   "width": 192,
+                   "height": 192
+                  },
+                  {
+                   "url": "https://yt3.googleusercontent.com/JyCFwLjPpOWAyhx9mtPaD92Phz-MyWLGT9O1wegAuhyQr00XDqgGotLx9xzAVBtEGAq7AMmx9vOt=s576",
+                   "width": 576,
+                   "height": 576
+                  },
+                  {
+                   "url": "https://yt3.googleusercontent.com/JyCFwLjPpOWAyhx9mtPaD92Phz-MyWLGT9O1wegAuhyQr00XDqgGotLx9xzAVBtEGAq7AMmx9vOt=s1200",
+                   "width": 1200,
+                   "height": 1200
+                  }
+                 ]
+                },
+                "thumbnailCrop": "MUSIC_THUMBNAIL_CROP_UNSPECIFIED",
+                "thumbnailScale": "MUSIC_THUMBNAIL_SCALE_ASPECT_FIT"
+               }
+              },
+              "flexColumns": [
+               {
+                "musicResponsiveListItemFlexColumnRenderer": {
+                 "text": {
+                  "runs": [
+                   {
+                    "text": "Coldplay - Greatest Hits (Full Album, Super Collection)"
+                   }
+                  ]
+                 },
+                 "displayPriority": "MUSIC_RESPONSIVE_LIST_ITEM_COLUMN_DISPLAY_PRIORITY_HIGH"
+                }
+               },
+               {
+                "musicResponsiveListItemFlexColumnRenderer": {
+                 "text": {
+                  "runs": [
+                   {
+                    "text": "Hits & Best Songs Playlist ",
+                    "navigationEndpoint": {
+                     "browseEndpoint": {
+                      "browseId": "UCCh7iY0jKvjszpQFy9HykAw",
+                      "browseEndpointContextSupportedConfigs": {
+                       "browseEndpointContextMusicConfig": {
+                        "pageType": "MUSIC_PAGE_TYPE_USER_CHANNEL"
+                       }
+                      }
+                     }
+                    }
+                   },
+                   {
+                    "text": " \u2022 "
+                   },
+                   {
+                    "text": "211K views"
+                   }
+                  ]
+                 },
+                 "displayPriority": "MUSIC_RESPONSIVE_LIST_ITEM_COLUMN_DISPLAY_PRIORITY_HIGH"
+                }
+               }
+              ],
+              "flexColumnDisplayStyle": "MUSIC_RESPONSIVE_LIST_ITEM_FLEX_COLUMN_DISPLAY_STYLE_TWO_LINE_STACK",
+              "navigationEndpoint": {
+               "browseEndpoint": {
+                "browseId": "VLPLgaFNC_I_ZklJBOcKQK8fxQEdSxuDhSBP",
+                "browseEndpointContextSupportedConfigs": {
+                 "browseEndpointContextMusicConfig": {
+                  "pageType": "MUSIC_PAGE_TYPE_PLAYLIST"
+                 }
+                }
+               }
+              },
+              "itemHeight": "MUSIC_RESPONSIVE_LIST_ITEM_HEIGHT_TALL"
+             }
+            },
+            {
+             "musicResponsiveListItemRenderer": {
+              "thumbnail": {
+               "musicThumbnailRenderer": {
+                "thumbnail": {
+                 "thumbnails": [
+                  {
+                   "url": "https://yt3.ggpht.com/zujrUoKdaIhmWzMx17iTroDl7c7T15zszIKuNLJq-JlpiF3QerZO9NjQNFyizazAKkRyN5_BEq0=s192",
+                   "width": 192,
+                   "height": 192
+                  },
+                  {
+                   "url": "https://yt3.ggpht.com/zujrUoKdaIhmWzMx17iTroDl7c7T15zszIKuNLJq-JlpiF3QerZO9NjQNFyizazAKkRyN5_BEq0=s576",
+                   "width": 576,
+                   "height": 576
+                  },
+                  {
+                   "url": "https://yt3.ggpht.com/zujrUoKdaIhmWzMx17iTroDl7c7T15zszIKuNLJq-JlpiF3QerZO9NjQNFyizazAKkRyN5_BEq0=s1200",
+                   "width": 1200,
+                   "height": 1200
+                  }
+                 ]
+                },
+                "thumbnailCrop": "MUSIC_THUMBNAIL_CROP_UNSPECIFIED",
+                "thumbnailScale": "MUSIC_THUMBNAIL_SCALE_ASPECT_FIT"
+               }
+              },
+              "flexColumns": [
+               {
+                "musicResponsiveListItemFlexColumnRenderer": {
+                 "text": {
+                  "runs": [
+                   {
+                    "text": "Coldplay - Greatest Hits"
+                   }
+                  ]
+                 },
+                 "displayPriority": "MUSIC_RESPONSIVE_LIST_ITEM_COLUMN_DISPLAY_PRIORITY_HIGH"
+                }
+               },
+               {
+                "musicResponsiveListItemFlexColumnRenderer": {
+                 "text": {
+                  "runs": [
+                   {
+                    "text": "koricoman",
+                    "navigationEndpoint": {
+                     "browseEndpoint": {
+                      "browseId": "UCddIHidaFvqRtKcEPzS1FAA",
+                      "browseEndpointContextSupportedConfigs": {
+                       "browseEndpointContextMusicConfig": {
+                        "pageType": "MUSIC_PAGE_TYPE_USER_CHANNEL"
+                       }
+                      }
+                     }
+                    }
+                   },
+                   {
+                    "text": " \u2022 "
+                   },
+                   {
+                    "text": "34M views"
+                   }
+                  ]
+                 },
+                 "displayPriority": "MUSIC_RESPONSIVE_LIST_ITEM_COLUMN_DISPLAY_PRIORITY_HIGH"
+                }
+               }
+              ],
+              "flexColumnDisplayStyle": "MUSIC_RESPONSIVE_LIST_ITEM_FLEX_COLUMN_DISPLAY_STYLE_TWO_LINE_STACK",
+              "navigationEndpoint": {
+               "browseEndpoint": {
+                "browseId": "VLPLWifY4ZVngjfsRWcaplbD2m1muE3b5Wn-",
+                "browseEndpointContextSupportedConfigs": {
+                 "browseEndpointContextMusicConfig": {
+                  "pageType": "MUSIC_PAGE_TYPE_PLAYLIST"
+                 }
+                }
+               }
+              },
+              "itemHeight": "MUSIC_RESPONSIVE_LIST_ITEM_HEIGHT_TALL"
+             }
+            },
+            {
+             "musicResponsiveListItemRenderer": {
+              "thumbnail": {
+               "musicThumbnailRenderer": {
+                "thumbnail": {
+                 "thumbnails": [
+                  {
+                   "url": "https://i.ytimg.com/vi/9IOs70GYxdY/hqdefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCggAEOADGC0guwJIWg&rs=AMzJL3k1GgDOwUHHq31mi1sSy2Ju0oyfGg",
+                   "width": 400,
+                   "height": 225
+                  },
+                  {
+                   "url": "https://i.ytimg.com/vi/9IOs70GYxdY/hq720.jpg?sqp=-oaymwEKCKAGEMIDIABIWg&rs=AMzJL3l2QFEJQxE9PJPQTT2KgD_-On1rfQ",
+                   "width": 800,
+                   "height": 450
+                  },
+                  {
+                   "url": "https://i.ytimg.com/vi/9IOs70GYxdY/hq720.jpg?sqp=-oaymwEKCNUGEN8DIABIWg&rs=AMzJL3mOTo0w4gWRV5VYfYnPvRW27m0hMQ",
+                   "width": 853,
+                   "height": 479
+                  }
+                 ]
+                },
+                "thumbnailCrop": "MUSIC_THUMBNAIL_CROP_UNSPECIFIED",
+                "thumbnailScale": "MUSIC_THUMBNAIL_SCALE_ASPECT_FIT"
+               }
+              },
+              "flexColumns": [
+               {
+                "musicResponsiveListItemFlexColumnRenderer": {
+                 "text": {
+                  "runs": [
+                   {
+                    "text": "Coldplay 8d"
+                   }
+                  ]
+                 },
+                 "displayPriority": "MUSIC_RESPONSIVE_LIST_ITEM_COLUMN_DISPLAY_PRIORITY_HIGH"
+                }
+               },
+               {
+                "musicResponsiveListItemFlexColumnRenderer": {
+                 "text": {
+                  "runs": [
+                   {
+                    "text": "Claudio Paul Godoy",
+                    "navigationEndpoint": {
+                     "browseEndpoint": {
+                      "browseId": "UC9_QGQIkZ1khlmv346vRhXA",
+                      "browseEndpointContextSupportedConfigs": {
+                       "browseEndpointContextMusicConfig": {
+                        "pageType": "MUSIC_PAGE_TYPE_USER_CHANNEL"
+                       }
+                      }
+                     }
+                    }
+                   },
+                   {
+                    "text": " \u2022 "
+                   },
+                   {
+                    "text": "81K views"
+                   }
+                  ]
+                 },
+                 "displayPriority": "MUSIC_RESPONSIVE_LIST_ITEM_COLUMN_DISPLAY_PRIORITY_HIGH"
+                }
+               }
+              ],
+              "flexColumnDisplayStyle": "MUSIC_RESPONSIVE_LIST_ITEM_FLEX_COLUMN_DISPLAY_STYLE_TWO_LINE_STACK",
+              "navigationEndpoint": {
+               "browseEndpoint": {
+                "browseId": "VLPLSe75KXJy-wF8qC4GxqyxEivwzwSt_Shg",
+                "browseEndpointContextSupportedConfigs": {
+                 "browseEndpointContextMusicConfig": {
+                  "pageType": "MUSIC_PAGE_TYPE_PLAYLIST"
+                 }
+                }
+               }
+              },
+              "itemHeight": "MUSIC_RESPONSIVE_LIST_ITEM_HEIGHT_TALL"
+             }
+            },
+            {
+             "musicResponsiveListItemRenderer": {
+              "thumbnail": {
+               "musicThumbnailRenderer": {
+                "thumbnail": {
+                 "thumbnails": [
+                  {
+                   "url": "https://yt3.googleusercontent.com/qzkXbAmYwKr5AY41cQ8nxIj4aAFLqqqveiByzb27dKkE5TgXszxoYZPxvpGKmrgj7goLVPa4a3g=s192",
+                   "width": 192,
+                   "height": 192
+                  },
+                  {
+                   "url": "https://yt3.googleusercontent.com/qzkXbAmYwKr5AY41cQ8nxIj4aAFLqqqveiByzb27dKkE5TgXszxoYZPxvpGKmrgj7goLVPa4a3g=s576",
+                   "width": 576,
+                   "height": 576
+                  },
+                  {
+                   "url": "https://yt3.googleusercontent.com/qzkXbAmYwKr5AY41cQ8nxIj4aAFLqqqveiByzb27dKkE5TgXszxoYZPxvpGKmrgj7goLVPa4a3g=s1200",
+                   "width": 1200,
+                   "height": 1200
+                  }
+                 ]
+                },
+                "thumbnailCrop": "MUSIC_THUMBNAIL_CROP_UNSPECIFIED",
+                "thumbnailScale": "MUSIC_THUMBNAIL_SCALE_ASPECT_FIT"
+               }
+              },
+              "flexColumns": [
+               {
+                "musicResponsiveListItemFlexColumnRenderer": {
+                 "text": {
+                  "runs": [
+                   {
+                    "text": "As Melhores | Coldplay"
+                   }
+                  ]
+                 },
+                 "displayPriority": "MUSIC_RESPONSIVE_LIST_ITEM_COLUMN_DISPLAY_PRIORITY_HIGH"
+                }
+               },
+               {
+                "musicResponsiveListItemFlexColumnRenderer": {
+                 "text": {
+                  "runs": [
+                   {
+                    "text": "Alessandro Santos Martins",
+                    "navigationEndpoint": {
+                     "browseEndpoint": {
+                      "browseId": "UC7qNWUkWMjcm2vdzrAlBhWw",
+                      "browseEndpointContextSupportedConfigs": {
+                       "browseEndpointContextMusicConfig": {
+                        "pageType": "MUSIC_PAGE_TYPE_USER_CHANNEL"
+                       }
+                      }
+                     }
+                    }
+                   },
+                   {
+                    "text": " \u2022 "
+                   },
+                   {
+                    "text": "3.1M views"
+                   }
+                  ]
+                 },
+                 "displayPriority": "MUSIC_RESPONSIVE_LIST_ITEM_COLUMN_DISPLAY_PRIORITY_HIGH"
+                }
+               }
+              ],
+              "flexColumnDisplayStyle": "MUSIC_RESPONSIVE_LIST_ITEM_FLEX_COLUMN_DISPLAY_STYLE_TWO_LINE_STACK",
+              "navigationEndpoint": {
+               "browseEndpoint": {
+                "browseId": "VLPLnhlXP_aORuqxf4m51yHwqV8PWm_jwYMB",
+                "browseEndpointContextSupportedConfigs": {
+                 "browseEndpointContextMusicConfig": {
+                  "pageType": "MUSIC_PAGE_TYPE_PLAYLIST"
+                 }
+                }
+               }
+              },
+              "itemHeight": "MUSIC_RESPONSIVE_LIST_ITEM_HEIGHT_TALL"
+             }
+            }
+           ],
+           "continuations": [
+            {
+             "nextContinuationData": {
+              "continuation": "ErEHEghjb2xkcGxheRqkB0VnZUtBUVFvQUVBQlNCUnFDaEFERUFRUUNoQUpFQVdDQVNKUVRHZGhSazVEWDBsZldtdHNTa0pQWTB0UlN6aG1lRkZGWkZONGRVUm9VMEpRZ2dFaVVFeFhhV1paTkZwV2JtZHFabk5TVjJOaGNHeGlSREp0TVcxMVJUTmlOVmR1TFlJQklsQk1VMlUzTlV0WVNua3RkMFk0Y1VNMFIzaHhlWGhGYVhaM2VuZFRkRjlUYUdlQ0FTSlFURzVvYkZoUVgyRlBVblZ4ZUdZMGJUVXhlVWgzY1ZZNFVGZHRYMnAzV1UxQ2dnRVNVRXczT1RFeE1qSXlORGhHTURaQk9Ua3hnZ0VpVUV3eWVXeFNiSHB3YkMxd01VcElUelJQYmxoV1UwNTRZVXN5YkhwWFpVRlRlb0lCRWxCTU5UUkNRalZCTXpZek1FWTBNa0pHT1lJQklsQk1VV0pEV2t4UFdDMURjV0k0VEd3d2JHdFdkemxqWDE4NVExSkdWVzU0U25hQ0FTSlFURUUxVWxwVVpTMU1UakpJTm5jemJscGtOR1ZoWVdVMVZtRnBkV2cwVjNCaWdnRVNVRXcyTkRaRk9UTTROME13T0RWRVJrVXdnZ0VpVUV4ZmEzRk9VR2hGZFZSSGNHRTJhMkZTTmpoU1dWZHFiMVZuTlhweU0zRmFkNElCSWxCTVJVWnBialZhZEVWWFZYQk9kbXREWldnemVGQjZVbFpxTkU5UVRtTllOVy1DQVJKUVRFWTBNRVl5TXpFMk5EY3hNVEZET1RtQ0FTSlFUREpwVTJOcVdXTTBiMGxwUTJsSmFHaFdPVEpzZGsxeU9WaE9RblJITUZBM2dnRWlVRXc1WTJ3d04xTlVPWGRrVDB0NFdreEdTa3RCTm14ek5sRjFSVTlNVmt4NE40SUJJbEJNYkU5T2ExZE9kRlI0YkZKbmJteHNSMEZtYkRSRmVHMDVPVzlhYkU5dFZXcUNBU0pRVEhSNlRFYzROWGxrVTJ4bmRqSnZZVWs0UkVKV1RXTXlSSEJOVlhSZlkwbEZnZ0VpVUV3Mk1GOW5iMHRtVG1Gd2JHeEhNWEJ3YkdWWVUyTmlUa1JWWVZVd2FsUk5Zb0lCSWxCTU5HUmhSM0JzZEZWd1JrOUxhazFDZVRaMldsbDJjak5WTkcxMGMzRmxRVkdDQVNKUVRHNDBVMGt6WmpBMllYaFpjVTlOVDFwNlkwVnhXa3R0YlVGbWFtcGllalIxGPHq0C4%3D"
+             }
+            }
+           ],
+           "shelfDivider": {
+            "musicShelfDividerRenderer": {
+             "hidden": true
+            }
+           }
+          }
+         }
+        ],
+        "header": {
+         "chipCloudRenderer": {
+          "chips": [
+           {
+            "chipCloudChipRenderer": {
+             "style": {
+              "styleType": "STYLE_SECONDARY"
+             },
+             "navigationEndpoint": {
+              "searchEndpoint": {
+               "query": "coldplay"
+              }
+             },
+             "icon": {
+              "iconType": "CLOSE"
+             },
+             "isSelected": false,
+             "uniqueId": "Clear filters"
+            }
+           },
+           {
+            "chipCloudChipRenderer": {
+             "style": {
+              "styleType": "STYLE_DEFAULT"
+             },
+             "text": {
+              "runs": [
+               {
+                "text": "Songs"
+               }
+              ]
+             },
+             "navigationEndpoint": {
+              "searchEndpoint": {
+               "query": "coldplay",
+               "params": "EgWKAQIIAWoKEAMQBBAKEAkQBQ%3D%3D"
+              }
+             },
+             "isSelected": false,
+             "uniqueId": "Songs"
+            }
+           },
+           {
+            "chipCloudChipRenderer": {
+             "style": {
+              "styleType": "STYLE_DEFAULT"
+             },
+             "text": {
+              "runs": [
+               {
+                "text": "Videos"
+               }
+              ]
+             },
+             "navigationEndpoint": {
+              "searchEndpoint": {
+               "query": "coldplay",
+               "params": "EgWKAQIQAWoKEAMQBBAKEAkQBQ%3D%3D"
+              }
+             },
+             "isSelected": false,
+             "uniqueId": "Videos"
+            }
+           },
+           {
+            "chipCloudChipRenderer": {
+             "style": {
+              "styleType": "STYLE_PRIMARY"
+             },
+             "text": {
+              "runs": [
+               {
+                "text": "Community playlists"
+               }
+              ]
+             },
+             "navigationEndpoint": {
+              "searchEndpoint": {
+               "query": "coldplay",
+               "params": "EgeKAQQoAEABagoQAxAEEAoQCRAF"
+              }
+             },
+             "isSelected": true,
+             "uniqueId": "Community playlists"
+            }
+           },
+           {
+            "chipCloudChipRenderer": {
+             "style": {
+              "styleType": "STYLE_DEFAULT"
+             },
+             "text": {
+              "runs": [
+               {
+                "text": "Albums"
+               }
+              ]
+             },
+             "navigationEndpoint": {
+              "searchEndpoint": {
+               "query": "coldplay",
+               "params": "EgWKAQIYAWoKEAMQBBAKEAkQBQ%3D%3D"
+              }
+             },
+             "isSelected": false,
+             "uniqueId": "Albums"
+            }
+           },
+           {
+            "chipCloudChipRenderer": {
+             "style": {
+              "styleType": "STYLE_DEFAULT"
+             },
+             "text": {
+              "runs": [
+               {
+                "text": "Artists"
+               }
+              ]
+             },
+             "navigationEndpoint": {
+              "searchEndpoint": {
+               "query": "coldplay",
+               "params": "EgWKAQIgAWoKEAMQBBAKEAkQBQ%3D%3D"
+              }
+             },
+             "isSelected": false,
+             "uniqueId": "Artists"
+            }
+           }
+          ],
+          "collapsedRowCount": 1,
+          "horizontalScrollable": true
+         }
+        }
+       }
+      },
+      "tabIdentifier": "music_search_catalog"
+     }
+    }
+   ]
+  }
+ }
+}

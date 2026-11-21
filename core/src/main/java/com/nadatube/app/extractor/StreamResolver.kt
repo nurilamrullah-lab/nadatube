@@ -33,7 +33,7 @@ class StreamResolver(
         return stream
     }
 
-    internal fun markSelected(videoId: String, stream: AudioStream) {
+    fun markSelected(videoId: String, stream: AudioStream) {
         _selected.update { it + (videoId to stream) }
     }
 
