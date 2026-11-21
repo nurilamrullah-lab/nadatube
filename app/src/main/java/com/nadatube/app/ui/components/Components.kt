@@ -82,7 +82,7 @@ fun Artwork(url: String?, modifier: Modifier = Modifier, corner: Dp = 12.dp) {
     Box(
         modifier
             .clip(RoundedCornerShape(corner))
-            .background(Brush.linearGradient(listOf(Nada.IndigoSoft, Color(0xFFE0E7FF)))),
+            .background(Brush.linearGradient(listOf(Nada.IndigoSoft, Nada.IndigoSoft2))),
         contentAlignment = Alignment.Center,
     ) {
         Icon(Icons.Rounded.MusicNote, null, tint = Nada.IndigoLight.copy(alpha = 0.5f))

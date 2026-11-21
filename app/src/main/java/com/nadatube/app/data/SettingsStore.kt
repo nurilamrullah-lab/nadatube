@@ -4,6 +4,7 @@ import android.content.Context
 import com.nadatube.app.extractor.StreamQuality
 import com.nadatube.app.playback.EqualizerPresets
 import com.nadatube.app.sponsorblock.SponsorSkipLogic
+import com.nadatube.app.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,6 +34,14 @@ class SettingsStore(context: Context) {
         prefs.getStringSet("sb_categories", SponsorSkipLogic.DEFAULT_CATEGORIES)!!.toSet(),
     )
     val sponsorCategories: StateFlow<Set<String>> = _sponsorCategories.asStateFlow()
+
+    private val _themeMode = MutableStateFlow(ThemeMode.of(prefs.getString("theme_mode", null)))
+    val themeMode: StateFlow<ThemeMode> = _themeMode.asStateFlow()
+
+    fun setThemeMode(mode: ThemeMode) {
+        _themeMode.value = mode
+        prefs.edit().putString("theme_mode", mode.name).apply()
+    }
 
     fun updateEqualizer(transform: (EqualizerSettings) -> EqualizerSettings) {
         val next = transform(_equalizer.value)
