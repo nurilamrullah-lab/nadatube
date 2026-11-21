@@ -97,5 +97,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if ! gh release view "${{ github.ref_name }}" >/dev/null 2>&1; then
+            gh release create "${{ github.ref_name }}" --title "NadaTube Desktop ${{ github.ref_name }}" --notes "NadaTube Desktop — pemutar audio YouTube tanpa iklan (AAC). Installer Windows (.msi/.exe). APK Android tetap di rilis v* terpisah."
+          fi
           gh release upload "${{ github.ref_name }}" artifacts/*.msi artifacts/*.exe --clobber
-          gh release edit "${{ github.ref_name }}" --title "NadaTube Desktop ${{ github.ref_name }}" --notes "NadaTube Desktop — pemutar audio YouTube tanpa iklan (AAC). Installer Windows (.msi/.exe). APK Android tetap di rilis v* terpisah."
