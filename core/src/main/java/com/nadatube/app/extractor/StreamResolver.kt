@@ -33,7 +33,8 @@ class StreamResolver(
         return stream
     }
 
-    internal fun markSelected(videoId: String, stream: AudioStream) {
+    /** Stream actually chosen per videoId, for the format badges in the UI. */
+    fun markSelected(videoId: String, stream: AudioStream) {
         _selected.update { it + (videoId to stream) }
     }
 
