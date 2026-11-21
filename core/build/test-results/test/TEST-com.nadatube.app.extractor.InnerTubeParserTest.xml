@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nadatube.app.extractor.InnerTubeParserTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-11-21T00:58:49" hostname="modal" time="0.114">
+  <properties/>
+  <testcase name="radio next response parses queue" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.088"/>
+  <testcase name="expiry comes from the url expire parameter when it is earlier" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.006"/>
+  <testcase name="ciphered and video formats are skipped" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.001"/>
+  <testcase name="unplayable status throws with reason" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.001"/>
+  <testcase name="thumbnail upscaling only touches google image cdn" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.001"/>
+  <testcase name="album artist and playlist searches parse browse ids" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.008"/>
+  <testcase name="no direct audio streams throws" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.001"/>
+  <testcase name="duration parsing" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.001"/>
+  <testcase name="song search parses title artist album duration and hi-res cover" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.002"/>
+  <testcase name="indonesian locale song row parses dotted duration" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.002"/>
+  <testcase name="player response yields audio-only streams with metadata and loudness" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.001"/>
+  <testcase name="album browse yields tracks with header cover fallback" classname="com.nadatube.app.extractor.InnerTubeParserTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
