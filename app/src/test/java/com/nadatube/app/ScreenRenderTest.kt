@@ -1,5 +1,6 @@
 package com.nadatube.app
 
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -137,6 +138,38 @@ class ScreenRenderTest {
         waitFor("Penyimpanan")
         settle()
         shot("5_library")
+
+        // ---- dark theme: the same screens, plus the picker
+        container.settings.setThemeMode(com.nadatube.app.ui.theme.ThemeMode.DARK)
+        settle(1_500)
+        shot("5_library_dark")
+
+        compose.onNode(hasText("Beranda")).performClick()
+        waitFor("dan lainnya")
+        settle()
+        shot("1_home_dark")
+
+        compose.onNode(hasContentDescription("Pilih tema", substring = true)).performClick()
+        waitFor("Ikuti Sistem")
+        settle(1_500)
+        com.github.takahirom.roborazzi.captureScreenRoboImage("screenshots/6_theme_picker_dark.png")
+        compose.onNode(hasText("Terang (Light)")).performClick()
+        settle(1_500)
+        com.github.takahirom.roborazzi.captureScreenRoboImage("screenshots/6_theme_picker_light.png")
+        compose.onNode(hasText("Gelap (Dark)")).performClick()
+        settle(800)
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        settle(800)
+
+        compose.activityRule.scenario.onActivity { it.openPlayer.value = true }
+        waitFor("SEDANG DIPUTAR")
+        settle()
+        shot("3_player_dark")
+
+        compose.onNode(hasText("EQ")).performClick()
+        waitFor("Equalizer 10-band")
+        settle(1_500)
+        com.github.takahirom.roborazzi.captureScreenRoboImage("screenshots/4_equalizer_dark.png")
     }
 
     private fun feedVisualizer() {

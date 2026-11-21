@@ -85,6 +85,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.input.pointer.pointerInput
@@ -111,6 +112,7 @@ import com.nadatube.app.ui.components.Pill
 import com.nadatube.app.ui.components.SegmentSeekBar
 import com.nadatube.app.ui.components.WaveVisualizer
 import com.nadatube.app.ui.components.formatDuration
+import com.nadatube.app.ui.theme.ColorMath
 import com.nadatube.app.ui.theme.Nada
 import kotlinx.coroutines.launch
 
@@ -131,7 +133,8 @@ fun PlayerScreen(container: AppContainer, onClose: () -> Unit) {
     val track = state.track
 
     val context = LocalContext.current
-    val ambient by produceState(Nada.IndigoLight, track?.thumbnailUrl) {
+    // Cover colour as sampled; tuned per theme below so the glow reads on white and on near-black.
+    val coverColor by produceState(Nada.IndigoLight, track?.thumbnailUrl) {
         val url = track?.thumbnailUrl ?: return@produceState
         val result = context.imageLoader.execute(ImageRequest.Builder(context).data(url).allowHardware(false).build())
         val bmp = ((result as? SuccessResult)?.drawable as? BitmapDrawable)?.bitmap ?: return@produceState
@@ -139,6 +142,8 @@ fun PlayerScreen(container: AppContainer, onClose: () -> Unit) {
         val swatch = p.vibrantSwatch ?: p.lightVibrantSwatch ?: p.dominantSwatch
         swatch?.let { value = Color(it.rgb) }
     }
+    val dark = Nada.IsDark
+    val ambient = Color(ColorMath.tuneGlow(coverColor.toArgb(), dark) or (0xFF shl 24))
     val glow by animateColorAsState(ambient, tween(800), label = "glow")
 
     val lyrics by produceState<Lyrics?>(null, track?.videoId) {
@@ -149,7 +154,7 @@ fun PlayerScreen(container: AppContainer, onClose: () -> Unit) {
 
     Box(
         Modifier.fillMaxSize().background(
-            Brush.verticalGradient(listOf(glow.copy(alpha = 0.28f), Nada.Canvas, Nada.Canvas)),
+            Brush.verticalGradient(listOf(glow.copy(alpha = if (dark) 0.42f else 0.28f), Nada.Canvas, Nada.Canvas)),
         ),
     ) {
         Column(
@@ -202,7 +207,7 @@ fun PlayerScreen(container: AppContainer, onClose: () -> Unit) {
                     Pill("Hemat ${(AudioStreamSelector.dataSavingRatio(stream) * 100).toInt()}% data", color = Nada.Green, background = Nada.GreenSoft)
                 }
                 if (segments.isNotEmpty()) {
-                    Pill("SB ${formatDuration(SponsorSkipLogic.totalSkippableMs(segments))}", color = Color(0xFFB45309), background = Nada.AmberSoft)
+                    Pill("SB ${formatDuration(SponsorSkipLogic.totalSkippableMs(segments))}", color = Nada.AmberInk, background = Nada.AmberSoft)
                 }
             }
             Spacer(Modifier.height(12.dp))
@@ -403,7 +408,7 @@ private fun EqualizerSheet(container: AppContainer, onDismiss: () -> Unit) {
                     SponsorSkipLogic.CATEGORY_LABELS.forEach { (key, label) ->
                         FilterChip(
                             selected = key in categories, onClick = { container.settings.toggleSponsorCategory(key) }, label = { Text(label) },
-                            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Nada.AmberSoft, selectedLabelColor = Color(0xFFB45309)),
+                            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Nada.AmberSoft, selectedLabelColor = Nada.AmberInk),
                         )
                     }
                 }
@@ -507,7 +512,7 @@ private fun SleepTimerSheet(container: AppContainer, onDismiss: () -> Unit) {
 private fun TimerChoice(label: String, modifier: Modifier, danger: Boolean = false, onClick: () -> Unit) {
     Box(
         modifier.clip(RoundedCornerShape(14.dp)).border(1.dp, Nada.Border, RoundedCornerShape(14.dp))
-            .background(if (danger) Color(0xFFFFF1F2) else Nada.Canvas).clickable(onClick = onClick).padding(vertical = 14.dp),
+            .background(if (danger) Nada.RoseSoft else Nada.Canvas).clickable(onClick = onClick).padding(vertical = 14.dp),
         contentAlignment = Alignment.Center,
     ) { Text(label, style = MaterialTheme.typography.labelLarge, color = if (danger) Nada.Rose else Nada.Ink) }
 }
