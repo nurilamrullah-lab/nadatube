@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "NadaTube"
-include(":app")
+include(":app", ":core", ":desktop")
