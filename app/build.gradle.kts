@@ -65,6 +65,8 @@ dependencies {
     val room = "2.6.1"
     val lifecycle = "2.8.4"
 
+    implementation(project(":core"))
+
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.activity:activity-compose:1.9.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle")
