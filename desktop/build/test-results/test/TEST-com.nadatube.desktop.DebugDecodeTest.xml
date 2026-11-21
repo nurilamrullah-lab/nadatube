@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nadatube.desktop.DebugDecodeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-21T01:04:48" hostname="modal" time="1.073">
+  <properties/>
+  <testcase name="debug" classname="com.nadatube.desktop.DebugDecodeTest" time="1.073"/>
+  <system-out><![CDATA[DBG youtube cfg=12100000000000000000000000000000 frames=9177 silent=60 first: 0.00 0.00 0.09 0.19 0.12 0.07 0.07 0.05 0.09 0.06 0.05 0.04 0.04 0.04 0.03 0.03 0.03 0.02 0.01 0.09 0.18 0.11 0.08 0.07 0.06 0.14 0.14 0.11 0.07 0.07 0.05 0.12 0.07 0.05 0.04 0.04 0.05 0.07 0.05 0.04 
+DBG youtube fresh-decoder-per-frame silent=1/60
+DBG ffmpeg-tone cfg=121056e500 frames=88 silent=84 first: 0.00 0.03 0.04 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+DBG ffmpeg-tone fresh-decoder-per-frame silent=57/60
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
