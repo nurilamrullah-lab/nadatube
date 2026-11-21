@@ -25,6 +25,9 @@ class StreamClientFallbackTest {
     /** clientName -> how /player answers ("bot", "ok-403", "ok-206", "unavailable"). */
     private val behaviour = mutableMapOf<String, String>()
     private val probes = mutableListOf<RecordedRequest>()
+    private val visitorRequests = mutableListOf<String>()
+    private var visitorEndpointFails = false
+    private val playerRequests = mutableListOf<Pair<String, String>>()
 
     private fun okBody(streamPath: String) =
         fixture.replace("https://rr1---sn-test.googlevideo.com/videoplayback", server.url(streamPath).toString())
@@ -47,6 +50,12 @@ class StreamClientFallbackTest {
                     return MockResponse().setResponseCode(206).setBody("x")
                 }
                 val body = request.body.readUtf8()
+                if (path.startsWith("/youtubei/v1/visitor_id")) {
+                    if (visitorEndpointFails) return MockResponse().setResponseCode(500)
+                    visitorRequests += request.getHeader("User-Agent").orEmpty()
+                    return MockResponse().setBody("""{"responseContext":{"visitorData":"VISITOR${visitorRequests.size}"}}""")
+                }
+                playerRequests += request.getHeader("X-Goog-Visitor-Id").orEmpty() to body
                 val name = Regex("\"clientName\":\"([A-Z_]+)\"").find(body)!!.groupValues[1]
                 return when (behaviour[name]) {
                     "bot" -> MockResponse().setBody("""{"playabilityStatus":{"status":"LOGIN_REQUIRED","reason":"Sign in to confirm you’re not a bot"}}""")
@@ -65,6 +74,70 @@ class StreamClientFallbackTest {
     fun tearDown() = server.shutdown()
 
     private fun client() = InnerTubeClient(OkHttpClient(), baseUrl = server.url("/").toString().trimEnd('/'))
+
+    @Test
+    fun `visionos is tried first with a minted visitor id and the exact request shape`() = runTest {
+        behaviour += mapOf("VISIONOS" to "ok-206")
+        var saved: String? = null
+        val c = InnerTubeClient(OkHttpClient(), baseUrl = server.url("/").toString().trimEnd('/'), onVisitorData = { saved = it })
+        val resolved = c.player("dQw4w9WgXcQ")
+
+        assertEquals("VISIONOS/1.02", resolved.clientName)
+        assertEquals(InnerTubeClient.VISIONOS_USER_AGENT, resolved.userAgent)
+        assertEquals("visitor id minted once and persisted", listOf("VISITOR1"), listOf(saved))
+        assertEquals(1, visitorRequests.size)
+
+        val (visitorHeader, body) = playerRequests.single()
+        assertEquals("VISITOR1", visitorHeader)
+        val json = kotlinx.serialization.json.Json.parseToJsonElement(body)
+        val client = json.path("context", "client")!!
+        assertEquals("VISIONOS", client["clientName"].str)
+        assertEquals("1.02", client["clientVersion"].str)
+        assertEquals("Apple", client["deviceMake"].str)
+        assertEquals("RealityDevice17,1", client["deviceModel"].str)
+        assertEquals("visionOS", client["osName"].str)
+        assertEquals("26.5.23O471", client["osVersion"].str)
+        assertEquals("en", client["hl"].str)
+        assertEquals("US", client["gl"].str)
+        assertEquals("VISITOR1", client["visitorData"].str)
+        assertEquals("true", json["contentCheckOk"].str)
+        assertEquals("true", json["racyCheckOk"].str)
+        assertEquals("HTML5_PREF_WANTS", json.path("playbackContext", "contentPlaybackContext", "html5Preference").str)
+    }
+
+    @Test
+    fun `a persisted visitor id is reused without minting a new one`() = runTest {
+        behaviour += mapOf("VISIONOS" to "ok-206")
+        val c = InnerTubeClient(OkHttpClient(), baseUrl = server.url("/").toString().trimEnd('/'), initialVisitorData = "SAVED")
+        c.player("dQw4w9WgXcQ")
+        assertTrue(visitorRequests.isEmpty())
+        assertEquals("SAVED", playerRequests.single().first)
+    }
+
+    @Test
+    fun `bot check triggers one retry with a freshly minted visitor id`() = runTest {
+        behaviour += mapOf("VISIONOS" to "bot", "ANDROID_VR" to "bot", "ANDROID" to "bot", "IOS" to "bot")
+        val c = InnerTubeClient(OkHttpClient(), baseUrl = server.url("/").toString().trimEnd('/'), initialVisitorData = "STALE")
+        assertThrows(ExtractionException::class.java) { kotlinx.coroutines.runBlocking { c.player("dQw4w9WgXcQ") } }
+        assertEquals("one refresh, not a loop", 1, visitorRequests.size)
+        assertEquals(setOf("STALE", "VISITOR1"), playerRequests.map { it.first }.toSet())
+
+        // The refreshed id is what the next resolve uses, and can now succeed.
+        behaviour["VISIONOS"] = "ok-206"
+        assertEquals("VISIONOS/1.02", c.player("dQw4w9WgXcQ").clientName)
+        assertEquals("VISITOR1", playerRequests.last().first)
+    }
+
+    @Test
+    fun `failing to mint a visitor id is not fatal`() = runTest {
+        behaviour += mapOf("VISIONOS" to "ok-206")
+        visitorEndpointFails = true
+        val resolved = client().player("dQw4w9WgXcQ")
+        assertEquals("VISIONOS/1.02", resolved.clientName)
+        assertEquals("sent without a visitor id", "", playerRequests.single().first)
+        assertNull(InnerTubeParser.parseVisitorData("""{"responseContext":{}}"""))
+        assertEquals("abc", InnerTubeParser.parseVisitorData("""{"responseContext":{"visitorData":"abc"}}"""))
+    }
 
     @Test
     fun `skips bot-gated and 403 clients, picks the first whose stream really downloads`() = runTest {

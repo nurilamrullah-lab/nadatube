@@ -112,7 +112,7 @@ class StreamDataSourcesTest {
 
         val playback = streamRequests.last()
         assertEquals("one User-Agent header", 1, playback.headers.values("User-Agent").size)
-        assertEquals(InnerTubeClient.ANDROID_VR.userAgent, playback.getHeader("User-Agent"))
+        assertEquals(InnerTubeClient.VISIONOS_USER_AGENT, playback.getHeader("User-Agent"))
         assertTrue("Range always sent (avoids throttling)", playback.getHeader("Range")!!.startsWith("bytes=0-"))
         assertFalse("never ExoPlayer's default UA", playback.getHeader("User-Agent")!!.contains("ExoPlayer"))
     }

@@ -29,8 +29,18 @@ class InnerTubeClient(
     private val baseUrl: String = "https://www.youtube.com",
     private val musicBaseUrl: String = "https://music.youtube.com",
     private val streamClients: List<Client> = STREAM_CLIENTS,
+    initialVisitorData: String? = null,
+    private val onVisitorData: (String) -> Unit = {},
 ) {
-    data class Client(val name: String, val id: Int, val version: String, val userAgent: String, val extra: Map<String, Any> = emptyMap())
+    data class Client(
+        val name: String,
+        val id: Int,
+        val version: String,
+        val userAgent: String,
+        val extra: Map<String, Any> = emptyMap(),
+        /** Sends `html5Preference` like the real client does (VISIONOS). */
+        val playbackContext: Boolean = false,
+    )
 
     companion object {
         val ANDROID_VR = Client(
@@ -52,6 +62,19 @@ class InnerTubeClient(
             "com.google.ios.youtube/20.10.4 (iPhone16,2; U; CPU iOS 18_3_2 like Mac OS X;)",
             mapOf("deviceMake" to "Apple", "deviceModel" to "iPhone16,2", "osName" to "iPhone", "osVersion" to "18.3.2.22D82"),
         )
+        val VISIONOS_USER_AGENT =
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15"
+
+        /** Apple Vision Pro YouTube client: direct audio URLs, no PO token on non-gated networks. */
+        val VISIONOS = Client(
+            "VISIONOS", 101, "1.02", VISIONOS_USER_AGENT,
+            mapOf(
+                "deviceMake" to "Apple", "deviceModel" to "RealityDevice17,1", "userAgent" to VISIONOS_USER_AGENT,
+                "osName" to "visionOS", "osVersion" to "26.5.23O471", "hl" to "en", "gl" to "US",
+            ),
+            playbackContext = true,
+        )
+        val WEB = Client("WEB", 1, "2.20250101.00.00", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0")
         val WEB_REMIX = Client("WEB_REMIX", 67, "1.20241127.01.00", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0")
 
         /**
@@ -59,7 +82,7 @@ class InnerTubeClient(
          * (LOGIN_REQUIRED for every video), ANDROID_TESTSUITE (UNPLAYABLE) and
          * TVHTML5_SIMPLY_EMBEDDED_PLAYER (ERROR) were tried and never yield playable URLs.
          */
-        val STREAM_CLIENTS = listOf(ANDROID_VR, ANDROID_VR_NEW, ANDROID, IOS)
+        val STREAM_CLIENTS = listOf(VISIONOS, ANDROID_VR, ANDROID_VR_NEW, ANDROID, IOS)
 
         /** Fallback UA for stream requests whose issuing client is unknown. */
         val STREAM_USER_AGENT get() = ANDROID_VR.userAgent
@@ -79,6 +102,21 @@ class InnerTubeClient(
     }
 
     suspend fun player(videoId: String): ResolvedStream = withContext(Dispatchers.IO) {
+        var failures = attempt(videoId, ensureVisitorData())
+        failures.resolved?.let { return@withContext it }
+        // A stale visitor id is a common reason for bot checks: mint a fresh one and retry once.
+        if (failures.errors.any { it.isBlocked() }) {
+            failures = attempt(videoId, refreshVisitorData())
+            failures.resolved?.let { return@withContext it }
+        }
+        throw playbackFailure(failures.errors)
+    }
+
+    private class Attempt(val resolved: ResolvedStream?, val errors: List<Exception>)
+
+    private fun Exception.isBlocked() = (this as? PlayabilityException)?.isBotCheck == true || this is StreamRejectedException
+
+    private fun attempt(videoId: String, visitor: String?): Attempt {
         val skip = rejected[videoId].orEmpty()
         val candidates = streamClients.filter { "${it.name}/${it.version}" !in skip }
             .ifEmpty { rejected.remove(videoId); streamClients }
@@ -89,16 +127,42 @@ class InnerTubeClient(
                     put("videoId", videoId)
                     put("contentCheckOk", true)
                     put("racyCheckOk", true)
-                })
+                    if (client.playbackContext) {
+                        putJsonObject("playbackContext") {
+                            putJsonObject("contentPlaybackContext") { put("html5Preference", "HTML5_PREF_WANTS") }
+                        }
+                    }
+                }, visitor)
                 val resolved = InnerTubeParser.parsePlayer(body)
                     .copy(clientName = "${client.name}/${client.version}", userAgent = client.userAgent)
                 probe(resolved)
-                return@withContext resolved
+                return Attempt(resolved, failures)
             } catch (e: Exception) {
                 failures += e
             }
         }
-        throw playbackFailure(failures)
+        return Attempt(null, failures)
+    }
+
+    @Volatile private var visitorData: String? = initialVisitorData
+
+    /**
+     * Session visitor id. Without one, YouTube treats every request as an anonymous bot and
+     * answers LOGIN_REQUIRED. Minted once, kept in memory and handed to [onVisitorData] so the
+     * app can persist it. Failure to mint is not fatal: requests just go out without it.
+     */
+    private fun ensureVisitorData(): String? = visitorData ?: refreshVisitorData()
+
+    private fun refreshVisitorData(): String? {
+        val fresh = runCatching {
+            val body = post(baseUrl, "visitor_id", WEB, buildJsonObject {}, null)
+            InnerTubeParser.parseVisitorData(body)
+        }.getOrNull()
+        if (fresh != null) {
+            visitorData = fresh
+            onVisitorData(fresh)
+        }
+        return visitorData
     }
 
     /**
@@ -163,7 +227,7 @@ class InnerTubeClient(
     suspend fun playlist(playlistId: String): List<Track> =
         browse(if (playlistId.startsWith("VL")) playlistId else "VL$playlistId")
 
-    private fun post(base: String, endpoint: String, client: Client, payload: JsonObject): String {
+    private fun post(base: String, endpoint: String, client: Client, payload: JsonObject, visitor: String? = null): String {
         val body = buildJsonObject {
             payload.forEach { (k, v) -> put(k, v) }
             putJsonObject("context") {
@@ -178,6 +242,7 @@ class InnerTubeClient(
                             else -> put(k, v.toString())
                         }
                     }
+                    if (visitor != null) put("visitorData", visitor)
                 }
             }
         }
@@ -190,6 +255,7 @@ class InnerTubeClient(
             .header("X-YouTube-Client-Version", client.version)
             .header("Origin", base)
             .header("Referer", "$base/")
+            .apply { if (visitor != null) header("X-Goog-Visitor-Id", visitor) }
             .build()
         http.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("InnerTube $endpoint HTTP ${response.code}")
