@@ -39,6 +39,13 @@ data class DesktopPalette(
     val rose: Color,
     val roseSoft: Color,
     val surfaceVariant: Color,
+    // Token Fluent 2 (Windows 11) — tambahan dari redesign, token lama dipertahankan.
+    val mica: Color,
+    val layer: Color,
+    val cardHover: Color,
+    val acrylic: Color,
+    val flyout: Color,
+    val strokeSubtle: Color,
 )
 
 val DesktopLightPalette = DesktopPalette(
@@ -51,6 +58,8 @@ val DesktopLightPalette = DesktopPalette(
     amber = Color(0xFFF59E0B), amberSoft = Color(0xFFFFFBEB), amberInk = Color(0xFFB45309),
     rose = Color(0xFFE11D48), roseSoft = Color(0xFFFFF1F2),
     surfaceVariant = Color(0xFFF3F4F6),
+    mica = Color(0xFFF1F3F8), layer = Color(0xFFF8F9FA), cardHover = Color(0xFFECEEF2),
+    acrylic = Color(0xDBFFFFFF), flyout = Color(0xF5FFFFFF), strokeSubtle = Color(0x0F111827),
 )
 
 val DesktopDarkPalette = DesktopPalette(
@@ -63,6 +72,8 @@ val DesktopDarkPalette = DesktopPalette(
     amber = Color(0xFFFBBF24), amberSoft = Color(0xFF2B2310), amberInk = Color(0xFFFCD34D),
     rose = Color(0xFFFB7185), roseSoft = Color(0xFF2D1519),
     surfaceVariant = Color(0xFF27272D),
+    mica = Color(0xFF121216), layer = Color(0xFF18181E), cardHover = Color(0xFF262630),
+    acrylic = Color(0xD618181F), flyout = Color(0xF522222B), strokeSubtle = Color(0x11FFFFFF),
 )
 
 /** Token warna aktif; diganti saat tema berubah, seluruh UI ikut berubah. */
@@ -89,6 +100,12 @@ object Nada {
     val AmberInk get() = palette.amberInk
     val Rose get() = palette.rose
     val RoseSoft get() = palette.roseSoft
+    val Mica get() = palette.mica
+    val Layer get() = palette.layer
+    val CardHover get() = palette.cardHover
+    val Acrylic get() = palette.acrylic
+    val Flyout get() = palette.flyout
+    val StrokeSubtle get() = palette.strokeSubtle
     val IsDark get() = palette.dark
 }
 
@@ -105,7 +122,7 @@ private fun scheme(p: DesktopPalette): ColorScheme {
         background = p.canvas, onBackground = p.ink,
         surface = p.card, onSurface = p.ink,
         surfaceVariant = p.surfaceVariant, onSurfaceVariant = p.muted,
-        surfaceContainer = p.card, surfaceContainerLow = p.canvas,
+        surfaceContainer = p.card, surfaceContainerLow = p.layer,
         surfaceContainerHigh = p.card, surfaceContainerHighest = p.surfaceVariant,
         outline = p.border, outlineVariant = p.border, error = p.rose,
     )

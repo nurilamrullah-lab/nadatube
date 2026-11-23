@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.nadatube.desktop"
-version = "1.2.0"
+version = "1.3.0"
 
 kotlin {
     jvmToolchain(17)
@@ -41,6 +41,9 @@ compose.desktop {
                 dirChooser = true
                 menuGroup = "NadaTube"
                 shortcut = true
+                // Ikon Windows = ikon launcher Android (icon.ico multi-ukuran 16-256),
+                // sumber: workspace/nadatube/icon/icon.ico (replikasi ic_launcher_* Android).
+                iconFile.set(project.file("src/main/resources/icon.ico"))
             }
             macOS {
                 bundleID = "com.nadatube.desktop"
