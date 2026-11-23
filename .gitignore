@@ -6,6 +6,16 @@
 .DS_Store
 /build/
 /app/build/
+/core/build/
+/desktop/build/
+**/build/
+# Kotlin / Java outputs
+*.class
+*.jar
+*.war
+*.ear
+*.apk
+*.aab
 /captures/
 .externalNativeBuild/
 .cxx/

@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asComposeImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -53,8 +53,7 @@ import com.nadatube.app.ui.theme.ThemeMode
 import com.nadatube.desktop.audio.PlaybackStatus
 import com.nadatube.desktop.data.DesktopServices
 import com.nadatube.desktop.data.HistoryEntry
-import java.io.ByteArrayInputStream
-import javax.imageio.ImageIO
+import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -85,7 +84,7 @@ fun rememberThumbnail(url: String?, http: OkHttpClient): ImageBitmap? {
             runCatching {
                 val bytes = http.newCall(Request.Builder().url(url).build()).execute()
                     .use { it.body?.bytes() } ?: return@runCatching null
-                ImageIO.read(ByteArrayInputStream(bytes))?.asComposeImageBitmap()
+                org.jetbrains.skia.Image.makeFromEncoded(bytes).toComposeImageBitmap()
             }.getOrNull()
         }
     }
@@ -273,7 +272,7 @@ fun DesktopApp(services: DesktopServices) {
             Spacer(Modifier.weight(1f))
             Text("v1.2.0 desktop", color = Nada.Faint)
         }
-        Divider(color = Nada.Border)
+        HorizontalDivider(color = Nada.Border)
         if (status != null) {
             Row(
                 Modifier.fillMaxWidth().background(Nada.IndigoSoft).padding(horizontal = 16.dp, vertical = 6.dp),
@@ -291,7 +290,7 @@ fun DesktopApp(services: DesktopServices) {
                 Screen.SETTINGS -> SettingsScreen(vm)
             }
         }
-        Divider(color = Nada.Border)
+        HorizontalDivider(color = Nada.Border)
         PlayerBar(vm)
         if (playerState.status == PlaybackStatus.ERROR) {
             Text(
@@ -441,7 +440,7 @@ private fun SettingsScreen(vm: DesktopViewModel) {
                 }
             }
         }
-        Divider(color = Nada.Border)
+        HorizontalDivider(color = Nada.Border)
         Text("Kualitas stream", fontWeight = FontWeight.Bold, color = Nada.Ink)
         for (q in com.nadatube.app.extractor.StreamQuality.entries) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable { vm.setQuality(q) }) {
@@ -449,21 +448,21 @@ private fun SettingsScreen(vm: DesktopViewModel) {
                 Text(if (q == com.nadatube.app.extractor.StreamQuality.BEST) "Terbaik" else "Hemat data", color = Nada.Ink)
             }
         }
-        Divider(color = Nada.Border)
+        HorizontalDivider(color = Nada.Border)
         Text("Volume: ${(playerState.volume * 100).toInt()}%", fontWeight = FontWeight.Bold, color = Nada.Ink)
         Slider(
             value = playerState.volume,
             onValueChange = { vm.setVolume(it) },
             modifier = Modifier.width(300.dp),
         )
-        Divider(color = Nada.Border)
+        HorizontalDivider(color = Nada.Border)
         Text("Folder unduhan", fontWeight = FontWeight.Bold, color = Nada.Ink)
         Row(verticalAlignment = Alignment.CenterVertically) {
             TextField(value = downloadDir, onValueChange = { downloadDir = it }, modifier = Modifier.weight(1f), singleLine = true)
             Spacer(Modifier.width(8.dp))
             Button(onClick = { vm.store.setDownloadDir(downloadDir.ifBlank { null }) }) { Text("Simpan") }
         }
-        Divider(color = Nada.Border)
+        HorizontalDivider(color = Nada.Border)
         Text("Tentang", fontWeight = FontWeight.Bold, color = Nada.Ink)
         Text("NadaTube desktop v1.2.0 — pemutar audio YouTube tanpa iklan.", color = Nada.Muted)
         Text("Desktop memutar AAC (itag 140). Opus belum didukung di JVM tanpa library native.", color = Nada.Muted)
@@ -599,7 +598,7 @@ private fun LyricsDialog(vm: DesktopViewModel) {
                 Text("Lirik", fontWeight = FontWeight.Bold, color = Nada.Ink, modifier = Modifier.weight(1f))
                 TextButton(onClick = { vm.closeLyrics() }) { Text("✕", color = Nada.Muted) }
             }
-            Divider(color = Nada.Border)
+            HorizontalDivider(color = Nada.Border)
             when {
                 lyrics == null -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -640,7 +639,7 @@ private fun QueueDialog(vm: DesktopViewModel) {
                 Text("Antrean", fontWeight = FontWeight.Bold, color = Nada.Ink, modifier = Modifier.weight(1f))
                 TextButton(onClick = { vm.setQueueOpen(false) }) { Text("✕", color = Nada.Muted) }
             }
-            Divider(color = Nada.Border)
+            HorizontalDivider(color = Nada.Border)
             if (state.queue.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Antrean kosong.", color = Nada.Muted)
