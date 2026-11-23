@@ -6,15 +6,6 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.datasource.AesCipherDataSink
-import androidx.media3.datasource.AesCipherDataSource
-import androidx.media3.datasource.DataSpec
-import androidx.media3.datasource.DefaultDataSource
-import androidx.media3.datasource.FileDataSource
-import androidx.media3.datasource.ResolvingDataSource
-import androidx.media3.datasource.cache.CacheDataSink
-import androidx.media3.datasource.cache.CacheDataSource
-import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.audio.AudioSink
@@ -37,8 +28,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.io.IOException
 
 /**
  * Background playback: ExoPlayer inside a MediaSessionService. Media3 provides the MediaStyle
@@ -53,7 +42,7 @@ class PlaybackService : MediaSessionService() {
     private var sponsorJob: Job? = null
     private var sponsorLoadJob: Job? = null
     private val skippedSegments = mutableSetOf<String>()
-    private val retried = mutableSetOf<String>()
+    private val retries = mutableMapOf<String, Int>()
 
     override fun onCreate() {
         super.onCreate()
@@ -114,35 +103,11 @@ class PlaybackService : MediaSessionService() {
                 .build()
     }
 
-    /**
-     * file:// (downloads) → read directly.
-     * nadatube://track/<id> → encrypted chunk cache → resolve to a fresh googlevideo URL → OkHttp.
-     */
-    private fun dataSourceFactory(): DefaultDataSource.Factory {
-        val http = OkHttpDataSource.Factory(container.httpClient).setUserAgent(com.nadatube.app.extractor.InnerTubeClient.STREAM_USER_AGENT)
-        val resolving = ResolvingDataSource.Factory(http, object : ResolvingDataSource.Resolver {
-            override fun resolveDataSpec(dataSpec: DataSpec): DataSpec {
-                if (dataSpec.uri.scheme != MediaItems.SCHEME) return dataSpec
-                val videoId = dataSpec.uri.lastPathSegment ?: throw IOException("URI tidak valid")
-                val stream = try {
-                    runBlocking { container.streamResolver.resolvePlayback(videoId) }
-                } catch (e: Exception) {
-                    throw IOException(e.message, e)
-                }
-                return dataSpec.withUri(android.net.Uri.parse(stream.url))
-            }
-        })
-        val key = container.settings.cacheKey()
-        val cached = CacheDataSource.Factory()
-            .setCache(container.audioCache)
-            .setUpstreamDataSourceFactory(resolving)
-            .setCacheWriteDataSinkFactory {
-                AesCipherDataSink(key, CacheDataSink(container.audioCache, CacheDataSink.DEFAULT_FRAGMENT_SIZE), ByteArray(32 * 1024))
-            }
-            .setCacheReadDataSourceFactory { AesCipherDataSource(key, FileDataSource()) }
-            .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
-        return DefaultDataSource.Factory(this, cached)
-    }
+    /** See [StreamDataSources]. */
+    private fun dataSourceFactory() = StreamDataSources.create(
+        this, container.httpClient, container.streamResolver, container.audioCache,
+        container.settings.cacheKey(), { container.settings.quality.value },
+    )
 
     // ------------------------------------------------------------------ listeners
 
@@ -171,16 +136,27 @@ class PlaybackService : MediaSessionService() {
         }
 
         override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
-            // Expired/invalid stream URL: drop the cached resolution and retry once.
             val id = player.currentMediaItem?.mediaId ?: return
-            container.streamResolver.invalidate(id)
-            if (error.errorCode in RETRYABLE && retried.add(id)) {
-                player.prepare()
+            val attempts = retries[id] ?: 0
+            when (PlaybackRecovery.decide(PlaybackRecovery.httpCode(error), attempts, PlaybackRecovery.isExtractionFailure(error))) {
+                // Rejected/expired URL: re-resolve (skipping the client that issued it) and
+                // resume where playback stopped; prepare() keeps the current position.
+                PlaybackRecovery.Action.REJECT_AND_RETRY -> {
+                    container.streamResolver.reject(id)
+                    retries[id] = attempts + 1
+                    player.prepare()
+                }
+                PlaybackRecovery.Action.RETRY -> {
+                    retries[id] = attempts + 1
+                    player.prepare()
+                }
+                PlaybackRecovery.Action.GIVE_UP -> container.streamResolver.invalidate(id)
             }
         }
     }
 
     private fun onNewItem(item: MediaItem?) {
+        retries.clear()
         skippedSegments.clear()
         container.nowPlaying.segments.value = emptyList()
         sponsorLoadJob?.cancel()
@@ -235,12 +211,5 @@ class PlaybackService : MediaSessionService() {
         }
         player.pause()
         player.volume = start
-    }
-
-    private companion object {
-        val RETRYABLE = setOf(
-            androidx.media3.common.PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS,
-            androidx.media3.common.PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
-        )
     }
 }

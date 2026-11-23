@@ -40,6 +40,8 @@ class AppContainer(private val app: Application) {
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     val httpClient: OkHttpClient = OkHttpClient.Builder()
+        .dns(com.nadatube.app.extractor.Ipv4FirstDns())
+        .addInterceptor(com.nadatube.app.extractor.StreamRangeInterceptor())
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build()

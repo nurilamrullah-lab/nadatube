@@ -72,6 +72,9 @@ data class ResolvedStream(
     val streams: List<AudioStream>,
     val loudnessDb: Float?,
     val expiresAtMs: Long,
+    /** InnerTube client that issued these URLs; stream requests must present its User-Agent. */
+    val clientName: String = "",
+    val userAgent: String? = null,
 )
 
 data class SponsorSegment(

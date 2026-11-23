@@ -37,8 +37,20 @@ class InnerTubeParserTest {
     @Test
     fun `unplayable status throws with reason`() {
         val body = """{"playabilityStatus":{"status":"LOGIN_REQUIRED","reason":"Please sign in"}}"""
-        val e = assertThrows(ExtractionException::class.java) { InnerTubeParser.parsePlayer(body) }
+        val e = assertThrows(PlayabilityException::class.java) { InnerTubeParser.parsePlayer(body) }
         assertTrue(e.message!!.contains("Please sign in"))
+        assertFalse("age/login gate is not the bot check", e.isBotCheck)
+        val bot = """{"playabilityStatus":{"status":"LOGIN_REQUIRED","reason":"Login untuk mengonfirmasi bahwa Anda bukan bot"}}"""
+        assertTrue(assertThrows(PlayabilityException::class.java) { InnerTubeParser.parsePlayer(bot) }.isBotCheck)
+    }
+
+    @Test
+    fun `expiry comes from the url expire parameter when it is earlier`() {
+        val now = 1_700_000_000_000L - 3_600_000L // one hour before the fixture's expire=1700000000
+        val r = InnerTubeParser.parsePlayer(fixture("player_android_vr"), nowMs = now)
+        assertEquals(1_700_000_000_000L, r.expiresAtMs)
+        assertEquals(1_700_000_000_000L, InnerTubeParser.urlExpiryMs("https://x/videoplayback?a=1&expire=1700000000&b=2"))
+        assertNull(InnerTubeParser.urlExpiryMs("https://x/videoplayback?a=1"))
     }
 
     @Test
