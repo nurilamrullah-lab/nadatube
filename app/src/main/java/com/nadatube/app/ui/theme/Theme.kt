@@ -19,22 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-enum class ThemeMode(val label: String, val description: String) {
-    LIGHT("Terang (Light)", "Kanvas bersih, kartu putih"),
-    DARK("Gelap (Dark)", "Nyaman untuk memutar musik malam hari"),
-    SYSTEM("Ikuti Sistem (System Default)", "Mengikuti pengaturan perangkat");
-
-    fun isDark(systemDark: Boolean): Boolean = when (this) {
-        LIGHT -> false
-        DARK -> true
-        SYSTEM -> systemDark
-    }
-
-    companion object {
-        fun of(value: String?): ThemeMode = entries.firstOrNull { it.name == value } ?: SYSTEM
-    }
-}
-
 data class NadaPalette(
     val dark: Boolean,
     val canvas: Color,
