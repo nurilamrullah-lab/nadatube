@@ -46,6 +46,12 @@ android {
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all {
+            // Screen renders are opt-in so CI stays deterministic: NADATUBE_SCREENSHOTS=1
+            it.systemProperty("roborazzi.test.record", "true")
+            it.environment("NADATUBE_SCREENSHOTS", System.getenv("NADATUBE_SCREENSHOTS") ?: "0")
+        }
     }
 }
 
@@ -89,4 +95,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation("org.robolectric:robolectric:4.13")
+    testImplementation("io.github.takahirom.roborazzi:roborazzi:1.26.0")
+    testImplementation("io.github.takahirom.roborazzi:roborazzi-compose:1.26.0")
+    testImplementation(composeBom)
+    testImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

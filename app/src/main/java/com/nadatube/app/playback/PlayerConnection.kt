@@ -186,6 +186,12 @@ class PlayerConnection(
         )
     }
 
+    /** Lets screen-render tests show the player without a running media session. */
+    @androidx.annotation.VisibleForTesting
+    internal fun overrideStateForTest(state: PlayerUiState) {
+        _state.value = state
+    }
+
     private fun startProgress() {
         if (progressJob?.isActive == true) return
         progressJob = scope.launch {

@@ -29,8 +29,12 @@ class StreamResolver(
         val resolved = resolve(videoId)
         val stream = AudioStreamSelector.selectForPlayback(resolved.streams, qualityProvider())
             ?: throw ExtractionException("Tidak ada stream audio yang cocok")
-        _selected.update { it + (videoId to stream) }
+        markSelected(videoId, stream)
         return stream
+    }
+
+    internal fun markSelected(videoId: String, stream: AudioStream) {
+        _selected.update { it + (videoId to stream) }
     }
 
     fun loudnessDb(videoId: String): Float? = cache[videoId]?.loudnessDb

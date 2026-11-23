@@ -115,7 +115,7 @@ fun LibraryScreen(container: AppContainer, onOpenPlaylist: (Long, String) -> Uni
                 itemsIndexed(downloads, key = { _, d -> "dl-${d.track.videoId}" }) { _, d ->
                     when (d.status) {
                         DownloadStatus.COMPLETED -> TrackRow(
-                            d.track, container, state = rowState(d.track).copy(badge = d.formatLabel.ifEmpty { null }),
+                            d.track, container, state = rowState(d.track).copy(badge = d.formatLabel.ifEmpty { null }, badgeHq = d.bitrateKbps >= 160),
                             onClick = { container.player.play(playable, playable.indexOfFirst { it.videoId == d.track.videoId }.coerceAtLeast(0), withRadio = false) },
                             extraMenu = listOf("Hapus unduhan" to { scope.launch { container.library.deleteDownload(d.track.videoId) }; Unit }),
                         )
