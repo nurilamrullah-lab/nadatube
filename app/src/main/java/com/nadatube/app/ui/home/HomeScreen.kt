@@ -76,6 +76,8 @@ import com.nadatube.app.ui.components.SectionHeader
 import com.nadatube.app.ui.components.TrackRow
 import com.nadatube.app.ui.components.WavyBackground
 import com.nadatube.app.ui.components.rememberTrackStates
+import com.nadatube.app.ui.settings.ThemeSheet
+import com.nadatube.app.ui.settings.ThemeToggleButton
 import com.nadatube.app.ui.theme.Nada
 import java.util.Calendar
 
@@ -103,7 +105,8 @@ fun HomeScreen(container: AppContainer, onSearch: (String) -> Unit, onOpenPlayer
     val quality by container.settings.quality.collectAsState()
     val sponsorOn by container.settings.sponsorBlockEnabled.collectAsState()
     val rowState = rememberTrackStates(container)
-
+    var showThemeSheet by remember { mutableStateOf(false) }
+    if (showThemeSheet) ThemeSheet(container.settings) { showThemeSheet = false }
     val seed = recent.firstOrNull()?.videoId
     LaunchedEffect(mood, seed) {
         loading = true
@@ -126,10 +129,8 @@ fun HomeScreen(container: AppContainer, onSearch: (String) -> Unit, onOpenPlayer
                         Text(greeting(), style = MaterialTheme.typography.bodyMedium, color = Nada.Muted)
                         Text("NadaTube", style = MaterialTheme.typography.headlineSmall, color = Nada.Ink)
                     }
-                    Box(
-                        Modifier.size(44.dp).clip(CircleShape).background(Nada.IndigoSoft),
-                        contentAlignment = Alignment.Center,
-                    ) { Icon(Icons.Rounded.GraphicEq, null, tint = Nada.Indigo) }
+                    val themeMode by container.settings.themeMode.collectAsState()
+                    ThemeToggleButton(onClick = { showThemeSheet = true }, mode = themeMode)
                 }
                 Spacer(Modifier.height(14.dp))
                 AudioStatusHeader(quality, sponsorOn)
@@ -212,7 +213,7 @@ private fun AudioStatusHeader(quality: StreamQuality, sponsorOn: Boolean) {
     ) {
         Pill("Bebas iklan", color = Nada.Green, background = Nada.GreenSoft, dot = true)
         Pill(if (quality == StreamQuality.BEST) "Opus 160 kbps" else "Hemat data")
-        if (sponsorOn) Pill("SponsorBlock", color = Color(0xFFB45309), background = Nada.AmberSoft)
+        if (sponsorOn) Pill("SponsorBlock", color = Nada.AmberInk, background = Nada.AmberSoft)
     }
 }
 
