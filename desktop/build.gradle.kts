@@ -32,7 +32,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Dmg, TargetFormat.Deb)
             packageName = "NadaTube"
-            packageVersion = "1.2.0"
+            packageVersion = "1.3.0"
             description = "YouTube Audio-Only Player — ad-free, high-res AAC"
             vendor = "NadaTube"
             copyright = "Copyright (c) 2026 NadaTube"

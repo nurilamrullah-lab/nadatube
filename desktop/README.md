@@ -4,7 +4,7 @@ Pemutar audio YouTube tanpa iklan untuk desktop, dibangun dengan
 [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
 di atas logika yang sama dengan aplikasi Android (`:core`).
 
-Versi desktop saat ini: **1.2.0** (Android tetap 1.1.0 — penomoran terpisah).
+Versi desktop saat ini: **1.3.0** (Android tetap 1.1.0 — penomoran terpisah).
 
 ## Yang sudah jalan
 
@@ -48,7 +48,7 @@ JavaSound tidak bisa memutar AAC maupun Opus. AAC didekode dengan
 pure Java). Untuk Opus tidak ada dekoder pure-Java yang tepercaya di Maven Central
 (Concentus hanya lewat JitPack), jadi desktop memilih stream AAC itag 140 dan
 menolak Opus dengan pesan yang jelas. Menambah Opus berarti membundel library
-native (libopus) per OS — dicatat sebagai pekerjaan lanjutan, bukan v1.2.0.
+native (libopus) per OS — dicatat sebagai pekerjaan lanjutan, bukan v1.3.0.
 
 ## Build
 
@@ -71,7 +71,7 @@ Hasil Windows: `desktop/build/compose/binaries/main/msi/*.msi`,
 `desktop/build/compose/binaries/main/exe/*.exe`,
 portable: `desktop/build/compose/binaries/main/app/`.
 
-Rilis: dorong tag `desktop-v*` (mis. `desktop-v1.2.0`) — workflow
+Rilis: dorong tag `desktop-v*` (mis. `desktop-v1.3.0`) — workflow
 `.github/workflows/desktop.yml` akan menguji, membangun installer di
 `windows-latest`, dan melampirkan .msi/.exe ke rilis GitHub. APK Android
 tetap memakai tag `v*` dan workflow `android.yml`.
@@ -131,7 +131,7 @@ terbukti dan solusinya terdokumentasi di sini, bukan ditebak:
    `com.android.tools.build:gradle:<versi>` di repo Google — versi dan artefak
    sama, perilaku build tidak berubah.
 
-## Batasan v1.2.0
+## Batasan v1.3.0
 
 - Dekode AAC saja; Opus ditolak dengan pesan jelas.
 - Tidak ada equalizer (butuh DSP; preset Android tidak dibawa ke desktop).

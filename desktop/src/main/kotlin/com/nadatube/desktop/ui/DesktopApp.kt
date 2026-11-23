@@ -479,7 +479,7 @@ private fun TitleBar(vm: DesktopViewModel) {
                 .padding(horizontal = 8.dp, vertical = 4.dp),
         )
         Spacer(Modifier.width(8.dp))
-        Text("v1.2.0 desktop", color = Nada.Faint, fontSize = 12.sp)
+        Text("v1.3.0 desktop", color = Nada.Faint, fontSize = 12.sp)
     }
 }
 
@@ -529,7 +529,7 @@ private fun SidebarNav(vm: DesktopViewModel) {
         Spacer(Modifier.weight(1f))
         NavItem("⚙", "Pengaturan", screen == Screen.SETTINGS, collapsed) { vm.setScreen(Screen.SETTINGS) }
         if (!collapsed) {
-            Text("NadaTube v1.2.0", color = Nada.Faint, fontSize = 11.sp, modifier = Modifier.padding(8.dp))
+            Text("NadaTube v1.3.0", color = Nada.Faint, fontSize = 11.sp, modifier = Modifier.padding(8.dp))
         }
     }
 }
@@ -933,7 +933,7 @@ private fun SettingsScreen(vm: DesktopViewModel) {
                     )
                     Spacer(Modifier.width(12.dp))
                     Column {
-                        Text("NadaTube desktop v1.2.0", color = Nada.Ink, fontWeight = FontWeight.SemiBold)
+                        Text("NadaTube desktop v1.3.0", color = Nada.Ink, fontWeight = FontWeight.SemiBold)
                         Text("Pemutar audio YouTube tanpa iklan.", color = Nada.Muted, fontSize = 12.sp)
                     }
                 }
